@@ -3,7 +3,7 @@ kubectl create namespace kafka
 # Deploy Strimzi operator
 kubectl create -f strimzi-kafka.yaml -n kafka
 # Create Apache Kafka Cluster
-# kubectl apply -f kafka-persistent-single.yaml -n kafka
+kubectl apply -f kafka-persistent-single.yaml -n kafka
 # Apply Secret
 kubectl apply -f secret.yaml -n kafka
 # Role
@@ -11,7 +11,7 @@ kubectl apply -f role.yaml -n kafka
 # Rolebinding
 kubectl apply -f rolebinding.yaml -n kafka
 # Create Apache Kafka Cluster
-kubectl apply -f kafka.yaml -n kafka
+# kubectl apply -f kafka.yaml -n kafka
 # MYSQL
 # kubectl apply -f mysql.yaml -n kafka
 # Kafka Connect

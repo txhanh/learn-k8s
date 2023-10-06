@@ -92,3 +92,39 @@ To start using your cluster, you need to run the following as a regular user:
 sudo kubeadm join 10.148.0.2:6443 --token jondct.uv3bl44v6s3af4a7 \
         --discovery-token-ca-cert-hash sha256:d50f82527c970755ebb027b417c9626d9af26b26a596f72a902cdaa83d2dadef \
         --cri-socket=unix:///var/run/cri-dockerd.sock
+
+# Install Calica networking - in order to fix coredns pod in k8s
+
+# cd back to ~ directory
+cd 
+curl https://raw.githubusercontent.com/projectcalico/calico/v3.26.1/manifests/calico.yaml -O
+# Apply calico.yaml file
+kubectl apply -f calico.yaml
+
+
+# ===================================================
+# Fix: 0/3 nodes are available: pod has unbound immediate PersistentVolumeClaims.
+# ===================================================
+
+# Download rancher.io/local-path storage class:
+
+kubectl apply -f https://raw.githubusercontent.com/rancher/local-path-provisioner/master/deploy/local-path-storage.yaml
+
+# Check with kubectl get storageclass
+
+# Make this storage class (local-path) the default:
+
+kubectl patch storageclass local-path -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
+
+# ===================================================
+# Fix: permission denied while trying to connect to the Docker daemon socket
+# ===================================================
+
+sudo groupadd docker
+sudo usermod -aG docker $USER
+grep docker /etc/group
+newgrp docker
+docker ps
+
+sudo iptables -t filter -A INPUT -d 10.0.0.0/8 -j ACCEPT
+sudo iptables -t filter -A INPUT -s 10.0.0.0/8 -j ACCEPT
