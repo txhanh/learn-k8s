@@ -1,7 +1,7 @@
 apiVersion: kafka.strimzi.io/v1beta2
 kind: Kafka
 metadata:
-  name: my-cluster
+  name: debezium-cluster
 spec:
   kafka:
     version: 3.5.1
@@ -27,13 +27,13 @@ spec:
       volumes:
       - id: 0
         type: persistent-claim
-        size: 10Gi
+        size: 3Gi
         deleteClaim: false
   zookeeper:
     replicas: 1
     storage:
       type: persistent-claim
-      size: 10Gi
+      size: 3Gi
       deleteClaim: false
   entityOperator:
     topicOperator: {}
